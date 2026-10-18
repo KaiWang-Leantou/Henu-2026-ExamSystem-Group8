@@ -1,0 +1,1 @@
+@bin\mysqladmin.exe -P3306 -uroot -p123456 shutdown

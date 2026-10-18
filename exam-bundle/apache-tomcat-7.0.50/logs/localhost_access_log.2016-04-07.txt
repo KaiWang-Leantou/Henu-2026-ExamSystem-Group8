@@ -1,0 +1,13 @@
+127.0.0.1 - - [07/Apr/2016:00:20:28 +0800] "GET /exam/loginpage.action HTTP/1.1" 200 3821
+127.0.0.1 - - [07/Apr/2016:00:20:33 +0800] "POST /exam/admin_login HTTP/1.1" 302 -
+127.0.0.1 - - [07/Apr/2016:00:20:33 +0800] "GET /exam/admin_main.action HTTP/1.1" 200 4559
+127.0.0.1 - - [07/Apr/2016:00:20:38 +0800] "GET /exam/admin_teacher HTTP/1.1" 200 4098
+127.0.0.1 - - [07/Apr/2016:00:20:40 +0800] "GET /exam/admin_logout HTTP/1.1" 302 -
+127.0.0.1 - - [07/Apr/2016:00:20:40 +0800] "GET /exam/loginpage.action HTTP/1.1" 200 3821
+127.0.0.1 - - [07/Apr/2016:00:23:27 +0800] "GET /exam/loginpage.action HTTP/1.1" 404 993
+127.0.0.1 - - [07/Apr/2016:00:25:16 +0800] "GET /exam/ HTTP/1.1" 404 961
+127.0.0.1 - tomcat [07/Apr/2016:00:25:29 +0800] "GET /manager/html/list?org.apache.catalina.filters.CSRF_NONCE=C1F588F9C48FD173677B77D271F4276B HTTP/1.1" 200 12420
+127.0.0.1 - tomcat [07/Apr/2016:00:25:44 +0800] "POST /manager/html/upload?org.apache.catalina.filters.CSRF_NONCE=A3C822CFCEE78CB79B965195FFB68777 HTTP/1.1" 200 14094
+127.0.0.1 - - [07/Apr/2016:00:26:10 +0800] "GET /exam/ HTTP/1.1" 302 -
+127.0.0.1 - - [07/Apr/2016:00:26:10 +0800] "GET /exam/student_main HTTP/1.1" 302 -
+127.0.0.1 - - [07/Apr/2016:00:26:10 +0800] "GET /exam/loginpage.action HTTP/1.1" 200 3821
