@@ -1,5 +1,21 @@
 # 上机考试系统（exam-bundle）
 
+> ## 📌 开发约定（全体必读，优先级最高）
+>
+> **本项目所有文件统一使用 UTF-8 编码开发。**
+>
+> - `*.md` / `*.sql` / `*.ini` / `*.xml` / `*.jsp` / `*.java` / `*.css` / `*.js` —— **UTF-8**，换行 LF
+> - `*.bat` / `*.cmd` —— **UTF-8**，换行 **CRLF**，且**内容只允许 ASCII 字符（英文）**
+>
+> 为什么 bat 要额外加一条"只用英文"：Windows 命令行按系统代码页（中文系统为 936）**逐字节**解析批处理文件。
+> 如果 bat 里出现 UTF-8 中文，多字节字符会被拆错位置，把一行断成两半，典型症状是
+> `'strap' 不是内部或外部命令`、脚本跳行、命令被吞掉。
+> **只要 bat 内容全是 ASCII，UTF-8 与 ANSI 的字节完全相同，就不会有任何编码问题。**
+>
+> 确实需要给使用者看中文时：把中文写进 README / 帮助文档；
+> 若某个带中文的文件必须在 Windows 命令行里运行，**再单独把它另存为 ANSI(GBK)** 分发，
+> 但**不要**把 GBK 版本提交进仓库。详见第六节「文件编码约定」。
+
 一套开箱即用的 Java EE 上机考试系统，所有依赖（JDK / Tomcat / MySQL）都打包在本目录内，
 **不需要另外安装任何软件**，解压后按下面四步即可跑起来。
 
@@ -25,14 +41,17 @@ exam-bundle/
 │       ├─ WEB-INF/classes/              编译后的 Java 类 + Spring/Struts 配置
 │       └─ WEB-INF/lib/                  36 个依赖 jar
 └─ mysql-5.6.16-win32/          自带 MySQL（端口 3306）
-    ├─ 1-初始化.bat             ① 生成数据目录
-    ├─ 2-启动.bat               ② 前台启动数据库（能看到错误）
-    ├─ 3-建库.bat               ③ 创建 exam 库与表
+    ├─ 1-init.bat               ① 生成数据目录
+    ├─ 2-start.bat              ② 前台启动数据库（能看到错误）
+    ├─ 3-createdb.bat           ③ 创建 exam 库与表
     ├─ xq-startup.bat           后台启动（被 start.bat 调用）
     ├─ xq-shutdown.bat          关闭数据库
     ├─ exam.sql                 建库脚本（表结构 + 默认账号）
     └─ my.ini                   配置（端口等，不含绝对路径）
 ```
+
+> 脚本文件名全部使用英文（`init` / `start` / `createdb`），避免中文文件名在命令行、日志、
+> Git 跨平台等场景下产生额外的编码麻烦。
 
 ---
 
@@ -44,9 +63,9 @@ exam-bundle/
 
 | 步骤 | 操作 | 说明 |
 |---|---|---|
-| ① | 双击 `mysql-5.6.16-win32\1-初始化.bat` | 生成 `data` 目录（约 10 秒）。已有 data 时自动跳过 |
-| ② | 双击 `mysql-5.6.16-win32\2-启动.bat` | 启动数据库，**窗口不要关**（关了就等于停服） |
-| ③ | 双击 `mysql-5.6.16-win32\3-建库.bat` | 创建 `exam` 库、5 张表、默认管理员。只需成功一次 |
+| ① | 双击 `mysql-5.6.16-win32\1-init.bat` | 生成 `data` 目录（约 10 秒）。已有 data 时自动跳过 |
+| ② | 双击 `mysql-5.6.16-win32\2-start.bat` | 启动数据库，**窗口不要关**（关了就等于停服） |
+| ③ | 双击 `mysql-5.6.16-win32\3-createdb.bat` | 创建 `exam` 库、5 张表、默认管理员。只需成功一次 |
 | ④ | 双击根目录 `start.bat` | 启动 Tomcat，浏览器打开 <http://localhost:8080/exam/> |
 
 ### 账号
@@ -64,7 +83,7 @@ exam-bundle/
 | 操作 | 做法 |
 |---|---|
 | 启动全部 | 双击 `start.bat` |
-| 单独启动数据库 | `mysql-5.6.16-win32\2-启动.bat` |
+| 单独启动数据库 | `mysql-5.6.16-win32\2-start.bat` |
 | 单独启动 Tomcat | `apache-tomcat-7.0.50\bin\startup.bat` |
 | 关闭数据库 | `mysql-5.6.16-win32\xq-shutdown.bat` |
 | 关闭 Tomcat | `apache-tomcat-7.0.50\bin\shutdown.bat` |
@@ -82,7 +101,7 @@ exam-bundle/
 
 ## 四、常见问题
 
-**Q1：`2-启动.bat` 一闪就没了 / 报 `Port 3306 in use`**
+**Q1：`2-start.bat` 一闪就没了 / 报 `Port 3306 in use`**
 说明 3306 被别的 MySQL 占了。查一下：
 
 ```bat
@@ -98,11 +117,11 @@ sc config MySQL267 start= disabled
 ```
 
 **Q2：启动报 `Can't connect to MySQL server on '127.0.0.1' (10061)`**
-数据库没起来。确认 `2-启动.bat` 的窗口还开着，且没报错。
+数据库没起来。确认 `2-start.bat` 的窗口还开着，且没报错。
 
 **Q3：页面能开但登录报数据库错误**
 按顺序排查：
-1. 跑过 `3-建库.bat` 吗？
+1. 跑过 `3-createdb.bat` 吗？
 2. `webapps\exam\WEB-INF\applicationContext.xml` 的端口是不是 3306？
 3. 手动验证：`mysql-5.6.16-win32\bin\mysql.exe -h 127.0.0.1 -P3306 -uexam -p123456 -e "use exam; show tables;"`
 
@@ -112,39 +131,38 @@ sc config MySQL267 start= disabled
 | # | 文件 | 改什么 |
 |---|---|---|
 | 1 | `mysql-5.6.16-win32\my.ini` | `port=xxxx`（`[client]` 和 `[mysqld]` 各一处） |
-| 2 | `mysql-5.6.16-win32\2-启动.bat` | `--port=xxxx` |
+| 2 | `mysql-5.6.16-win32\2-start.bat` | `--port=xxxx` |
 | 3 | `mysql-5.6.16-win32\xq-startup.bat` | `--port=xxxx` |
-| 4 | `mysql-5.6.16-win32\xq-shutdown.bat`、`3-建库.bat` | `-Pxxxx` |
+| 4 | `mysql-5.6.16-win32\xq-shutdown.bat`、`3-createdb.bat` | `-Pxxxx` |
 | 5 | `webapps\exam\WEB-INF\applicationContext.xml` | JDBC URL 里的端口 |
 
 **Q5：初始化失败 / 想重新来过**
-删掉 `mysql-5.6.16-win32\data` 整个目录，重新跑 `1-初始化.bat` → `2-启动.bat` → `3-建库.bat`。
+删掉 `mysql-5.6.16-win32\data` 整个目录，重新跑 `1-init.bat` → `2-start.bat` → `3-createdb.bat`。
 
 **Q6：登录提示账号密码错误**
-确认跑过 `3-建库.bat`。默认管理员是 `admin` / `123456`，密码在库里存的是
+确认跑过 `3-createdb.bat`。默认管理员是 `admin` / `123456`，密码在库里存的是
 `md5("123456") = e10adc3949ba59abbe56e057f20f883e`。
 
-**Q7：双击 bat 后满屏 `'xxx' 不是内部或外部命令`（如 `'strap'`、`'那是'`）**
-这是**文件编码被改坏**了，不是代码 bug。原来 bat 是 **GBK + CRLF**，如果被某个编辑器
-（尤其记事本）另存成了 **UTF-8** 或 **LF 换行**，cmd 按 936 代码页解析就会把中文的
-字节拆错位置，把一行拆成两半。
+**Q7：双击 bat 后满屏 `'xxx' 不是内部或外部命令`（如 `'strap'`、乱码汉字）**
+说明这个 bat 里被塞进了中文（或换行被改成了 LF）。cmd 按 936 代码页解析 UTF-8 中文时，
+会把一个汉字拆成两半，导致一行被截断成两条命令。
 
-修复：
+修复：把文件恢复成仓库里的版本即可——
 
 ```bat
-git checkout -- mysql-5.6.16-win32/1-初始化.bat
+git checkout -- exam-bundle/mysql-5.6.16-win32
 ```
 
-四个脚本都恢复一下，或直接 `git checkout -- .`（会丢弃本地改动，确认没有要保留的再执行）。
+如果整个工作区都乱了：`git checkout -- .`（会丢弃本地改动，确认没有要保留的再执行）。
 
-**绝对不要**用记事本编辑这些 bat 文件。要用请用 VS Code，并把文件编码保持为 GBK。
+**根治办法（已在仓库里执行）**：bat 里**不写任何中文**，只保留英文提示。这样无论系统代码页
+是多少、文件是 UTF-8 还是 ANSI，字节都完全一样，永远不会出这个问题。
 
 **Q8：中文显示成乱码（如 `绠＄悊鍛?`）**
-分两种情况，都**不影响功能**：
-- `3-建库.bat` 里查出来的表数据：命令行是 936 代码页，而 mysql 客户端按 UTF-8 输出，
-  所以中文看起来是乱码。**数据库里存的是正确的 UTF-8**，用 Navicat 查看是正常的。
-  初始化脚本已经刻意不打印中文字段，正常情况你看不到这段。
-- bat 脚本提示文字：说明该文件被转成了 UTF-8，按 Q7 处理。
+只有一种情况会出现：`3-createdb.bat` 查询数据库时打印中文。
+命令行是 936 代码页，而 mysql 客户端按 UTF-8 输出，所以窗口里看着是乱码。
+**数据库里存的是正确的 UTF-8**，用 Navicat / Workbench 查看完全正常。
+建库脚本已经刻意不打印中文字段，正常情况下不会看到。
 
 **Q9：启动时报路径相关错误**
 项目**不要**放在含中文或空格的路径下，例如 `C:\Users\张三\Desktop\我的项目\`。
@@ -172,6 +190,16 @@ D:\exam-bundle\        ← 全英文、无空格
 > 如果想彻底禁止，用 `sc config MySQL267 start= disabled`（禁用）。
 > 需要恢复原来的 MySQL 时：`sc config MySQL267 start= auto` 然后 `net start MySQL267`
 > —— 但**必须先关掉本项目的 MySQL**，否则端口冲突。
+
+### 2026-11-17 脚本编码整改
+
+| 改动 | 原因 |
+|---|---|
+| 三个脚本改名为 `1-init.bat` / `2-start.bat` / `3-createdb.bat` | 统一英文文件名 |
+| 全部 bat 的注释与提示文字改为英文 | 让 bat 内容成为纯 ASCII，彻底消除编码问题 |
+| 去掉 bat 里的 `chcp` 切换 | 纯 ASCII 不需要切换代码页，少一个变量 |
+| `timeout` 换成 `ping -n 5` | `timeout` 在输入被重定向时会直接报错退出，导致一键启动失败 |
+| 新增 `.gitattributes` 规则 | 保证 bat 的 CRLF 换行在任何人机器上都一致 |
 
 ### 关于两个 applicationContext.xml
 
@@ -207,27 +235,27 @@ set JAVA_HOME=%~dp0Java\jdk1.7.0_15
   src\xq\exam\action\MyNewAction.java
 ```
 
+### 文件编码约定（踩过坑，务必遵守）
+
+| 文件类型 | 编码 | 换行 | 额外要求 |
+|---|---|---|---|
+| `*.bat` / `*.cmd` | UTF-8 | **CRLF** | **内容只允许 ASCII（英文）**，不得出现中文 |
+| `*.md` / `*.sql` / `*.ini` / `*.xml` / `*.jsp` / `*.java` | UTF-8（无 BOM） | LF | 无 |
+| `*.jar` / `*.class` / `*.exe` / `*.dll` | 二进制 | —— | 不做任何转换 |
+
+**几条禁忌**：
+
+1. 不要往 bat 里写中文——这是上次事故的直接原因
+2. 不要给文件加 BOM（`\ufeff`），会导致第一行命令失效
+3. 不要用记事本编辑这些文件（会改编码、加 BOM、把 CRLF 变 LF）
+4. 用 VS Code 打开时，右下角应显示 `UTF-8` 和 `CRLF`
+
 ### 关于版本管理
 
 - `data/`（MySQL 数据目录）**不提交**，每人本地初始化生成；
-- `exam.sql`、4 个 bat、`my.ini` **必须提交**——这正是新人能一键跑起来的前提；
+- `exam.sql`、6 个 bat、`my.ini` **必须提交**——这正是新人能一键跑起来的前提；
 - `WEB-INF/classes` 与 `WEB-INF/lib` 已在 `.gitignore` 里做了例外，编译产物可以正常提交；
 - `.gitattributes` 强制 `*.bat` 使用 CRLF 换行（**否则 cmd 解析批处理会错行，脚本直接跑不起来**）。
-
-### 文件编码约定（踩过坑，务必遵守）
-
-| 文件类型 | 编码 | 换行 | 说明 |
-|---|---|---|---|
-| `*.bat` / `*.cmd` | **GBK (cp936)** | **CRLF** | Windows 命令行默认代码页 936；若存成 UTF-8 会把中文拆错行，脚本报"不是内部或外部命令" |
-| `*.sql` / `*.ini` / `*.md` / `*.xml` / `*.jsp` / `*.java` | UTF-8（无 BOM） | LF | 由 `.gitattributes` 强制，clone 后自动正确 |
-
-**几个禁忌**：
-
-1. 不要用**记事本**编辑 bat（会把编码改成 UTF-8 或加 BOM）
-2. 不要在 bat 里改用 `chcp 65001`（UTF-8 代码页下 cmd 解析中文仍不稳）
-3. 不要手动把 bat 转成 UTF-8 提交
-4. 用 VS Code 打开 bat 若显示乱码，右下角把编码改成 `GBK` 再编辑，保存时也选 GBK
-
 
 ### 数据库表
 
