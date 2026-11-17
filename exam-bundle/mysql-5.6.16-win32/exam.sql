@@ -16,7 +16,7 @@ USE exam;
 CREATE TABLE IF NOT EXISTS teacher (
   id        INT           NOT NULL AUTO_INCREMENT,
   tname     VARCHAR(50)   NOT NULL              COMMENT '登录账号',
-  tpass     VARCHAR(64)   NOT NULL              COMMENT '密码，32位小写MD5',
+  tpass     VARCHAR(64)   NOT NULL              COMMENT '密码，40位小写SHA1',
   tfullname VARCHAR(50)   DEFAULT NULL          COMMENT '姓名',
   tadmin    TINYINT(1)    DEFAULT 0             COMMENT '是否管理员 1是 0否',
   PRIMARY KEY (id),
@@ -92,10 +92,15 @@ GRANT ALL PRIVILEGES ON exam.* TO 'exam'@'127.0.0.1' IDENTIFIED BY '123456';
 
 -- ------------------------------------------------------------
 -- 7. 默认管理员：admin / 123456
---    密码是 DigestUtil.md5("123456") 的 32 位小写结果
+--    密码使用与程序一致的 SHA1（DigestUtil.sha1），40 位小写。
+--    注意：如果改成不插入这一行，程序会启用内置管理员 admin/admin，
+--          但它只在 teacher 表里没有任何 tadmin=1 记录时才有效
+--          （见 TeacherManager.noAdminUser()），有管理员后立即失效。
 -- ------------------------------------------------------------
 INSERT IGNORE INTO teacher (tname, tpass, tfullname, tadmin)
-VALUES ('admin', 'e10adc3949ba59abbe56e057f20f883e', '管理员', 1);
+VALUES ('admin', '7c4a8d09ca3762af61e59520943dc26494f8941b', '管理员', 1);
+
+
 
 -- ------------------------------------------------------------
 -- 8. 把 root 密码设为 123456（与 xq-shutdown.bat 中的写法保持一致）
