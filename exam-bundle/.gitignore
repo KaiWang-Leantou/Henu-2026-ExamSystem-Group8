@@ -42,7 +42,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # ============================================================
-# 3. 后端 (Java + Spring Boot + Maven)
+# 3. 后端 (Java + Spring Boot + Maven) —— 本项目为传统 Java EE
 # ============================================================
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -52,6 +52,11 @@ target/
 *.jar
 *.war
 
+# ★ 例外：已部署的 webapp 需要提交编译产物与依赖 jar，
+#   否则队友 clone 下来跑不起来（源码见 README 的说明）。
+!apache-tomcat-7.0.50/webapps/exam/WEB-INF/classes/**/*.class
+!apache-tomcat-7.0.50/webapps/exam/WEB-INF/lib/*.jar
+
 # ============================================================
 # 4. 本地数据库与运行时文件 (H2 / MySQL 等)
 # ============================================================
@@ -59,12 +64,25 @@ target/
 *.mv.db
 *.trace.db
 *.lock.db
+
+# ★ MySQL 数据目录：每台机器自己初始化生成，绝不提交。
+#   提交它会导致：几十 MB 二进制文件天天冲突、跨机器起不来、可能泄露考试数据。
+#   正确做法：每人本地运行 mysql-5.6.16-win32\1-初始化.bat 生成。
+#   建库脚本 exam.sql 与它生成的 schema 必须提交，见第 3 节的例外规则。
 data/
+
+# MySQL 运行日志
+*.err
+*.pid
 
 # 后端日志 (覆盖所有子目录下的 log)
 *.log
 logs/
 log/
+
+# Tomcat 运行时目录（可自动重新生成）
+temp/
+work/
 
 # ============================================================
 # 5. IDE 与操作系统产生的垃圾文件
