@@ -1,0 +1,95 @@
+# ============================================================
+# 1. 敏感信息与 AI Agent 配置（最高优先级，防止泄露）
+# ============================================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.crt
+id_rsa*
+
+# 常见 AI 编程助手本地配置
+.claude/
+.cursor/
+.copilot/
+.windsurf/
+.aider*
+.continue/
+.cline/
+.roo/
+.cody/
+.ai-context/
+.ai-sessions/
+CONTEXT_*.md
+CHAT_HISTORY_*.md
+
+# ============================================================
+# 2. 前端 (Vue3 + Vite + Node.js)
+# ============================================================
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.vitepress/cache/
+*.local
+
+# 前端日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================================
+# 3. 后端 (Java + Spring Boot + Maven)
+# ============================================================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.jar
+*.war
+
+# ============================================================
+# 4. 本地数据库与运行时文件 (H2 / MySQL 等)
+# ============================================================
+# H2 文件数据库生成的本地文件
+*.mv.db
+*.trace.db
+*.lock.db
+data/
+
+# 后端日志 (覆盖所有子目录下的 log)
+*.log
+logs/
+log/
+
+# ============================================================
+# 5. IDE 与操作系统产生的垃圾文件
+# ============================================================
+# 如果你们团队统一用 VSCode，可以保留 settings.json 供参考
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Mac / Windows 系统垃圾
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# 临时文件
+*.swp
+*.swo
+*~
