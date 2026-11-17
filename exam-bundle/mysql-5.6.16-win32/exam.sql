@@ -106,7 +106,10 @@ FLUSH PRIVILEGES;
 
 -- ------------------------------------------------------------
 -- 完成提示
+-- 注意：这里故意不查 tfullname（含中文），因为 Windows 命令行默认代码页
+--       是 936，mysql 客户端以 UTF-8 输出中文时在窗口里会显示成乱码。
+--       中文本身存的没问题，用 Navicat / Workbench 查看即可。
 -- ------------------------------------------------------------
 SELECT 'OK - database ready' AS result;
-SELECT id, tname, tfullname, tadmin FROM teacher;
+SELECT id, tname, tadmin, tpass FROM teacher;
 SHOW TABLES;

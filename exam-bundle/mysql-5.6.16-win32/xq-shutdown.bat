@@ -1,34 +1,34 @@
 @echo off
-chcp 65001 >nul
+chcp 936 >nul
 setlocal EnableExtensions
 cd /d "%~dp0"
 
 rem ------------------------------------------------------------------
-rem  å…³é—­ MySQLï¼ˆç«¯å£å¿…é¡»ä¸Ž my.ini / å¯åŠ¨è„šæœ¬ä¸€è‡´ï¼šæœ¬é¡¹ç›®ç”¨ 3306ï¼‰
-rem  ä¼šè‡ªåŠ¨å°è¯• root/123456ï¼Œå¤±è´¥å†è¯• root ç©ºå¯†ç 
+rem  ¹Ø±Õ MySQL£¨¶Ë¿Ú±ØÐëÓë my.ini / Æô¶¯½Å±¾Ò»ÖÂ£º±¾ÏîÄ¿ÓÃ 3306£©
+rem  »á×Ô¶¯³¢ÊÔ root/123456£¬Ê§°ÜÔÙÊÔ root ¿ÕÃÜÂë
 rem ------------------------------------------------------------------
 
-echo æ­£åœ¨å…³é—­ MySQLï¼ˆ127.0.0.1:3306ï¼‰...
+echo ÕýÔÚ¹Ø±Õ MySQL£¨127.0.0.1:3306£©...
 
 bin\mysqladmin.exe -h 127.0.0.1 -P3306 -uroot -p123456 shutdown 2>nul
 if not errorlevel 1 goto :ok
 
-echo root/123456 ä¸è¡Œï¼Œæ”¹è¯•ç©ºå¯†ç  ...
+echo root/123456 ²»ÐÐ£¬¸ÄÊÔ¿ÕÃÜÂë ...
 bin\mysqladmin.exe -h 127.0.0.1 -P3306 -uroot shutdown 2>nul
 if not errorlevel 1 goto :ok
 
 echo.
-echo [å¤±è´¥] å…³é—­å¤±è´¥ï¼Œå¸¸è§åŽŸå› ï¼š
-echo        1^) MySQL æœ¬æ¥å°±æ²¡æœ‰è¿è¡Œ
-echo        2^) root å¯†ç æ—¢ä¸æ˜¯ 123456 ä¹Ÿä¸æ˜¯ç©º â€”â€” è¯·æ‰‹åŠ¨æ‰§è¡Œä¸‹é¢è¿™æ¡å¹¶è¾“å…¥ä½ çš„å¯†ç ï¼š
+echo [Ê§°Ü] ¹Ø±ÕÊ§°Ü£¬³£¼ûÔ­Òò£º
+echo        1^) MySQL ±¾À´¾ÍÃ»ÓÐÔËÐÐ
+echo        2^) root ÃÜÂë¼È²»ÊÇ 123456 Ò²²»ÊÇ¿Õ ¡ª¡ª ÇëÊÖ¶¯Ö´ÐÐÏÂÃæÕâÌõ²¢ÊäÈëÄãµÄÃÜÂë£º
 echo           bin\mysqladmin.exe -h 127.0.0.1 -P3306 -uroot -p shutdown
-echo        3^) å®žåœ¨å…³ä¸æŽ‰ï¼šä»»åŠ¡ç®¡ç†å™¨é‡Œç»“æŸ mysqld.exe
+echo        3^) ÊµÔÚ¹Ø²»µô£ºÈÎÎñ¹ÜÀíÆ÷Àï½áÊø mysqld.exe
 echo.
 pause
 exit /b 1
 
 :ok
 echo.
-echo [å®Œæˆ] MySQL å·²å…³é—­ã€‚
+echo [Íê³É] MySQL ÒÑ¹Ø±Õ¡£
 pause
 endlocal

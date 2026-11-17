@@ -1,15 +1,15 @@
 @echo off
-chcp 65001 >nul
+chcp 936 >nul
 setlocal EnableExtensions
 cd /d "%~dp0"
 
 rem ==================================================================
-rem  ä¸€é”®å¯åŠ¨ï¼šMySQL(3306) + Tomcat(8080)
-rem  é¦–æ¬¡ä½¿ç”¨è¯·å…ˆä¾æ¬¡æ‰§è¡Œï¼š
-rem      mysql-5.6.16-win32\1-åˆå§‹åŒ–.bat
-rem      mysql-5.6.16-win32\2-å¯åŠ¨.bat      ï¼ˆä¿æŒçª—å£ä¸å…³ï¼‰
-rem      mysql-5.6.16-win32\3-å»ºåº“.bat
-rem  ä¹‹åå†è·‘æœ¬è„šæœ¬å³å¯ã€‚
+rem  Ò»¼üÆô¶¯£ºMySQL(3306) + Tomcat(8080)
+rem  Ê×´ÎÊ¹ÓÃÇëÏÈÒÀ´ÎÖ´ĞĞ£º
+rem      mysql-5.6.16-win32\1-³õÊ¼»¯.bat
+rem      mysql-5.6.16-win32\2-Æô¶¯.bat      £¨±£³Ö´°¿Ú²»¹Ø£©
+rem      mysql-5.6.16-win32\3-½¨¿â.bat
+rem  Ö®ºóÔÙÅÜ±¾½Å±¾¼´¿É¡£
 rem ==================================================================
 
 set "JAVA_HOME=%~dp0Java\jdk1.7.0_15"
@@ -17,45 +17,45 @@ set "CLASSPATH=.;%JAVA_HOME%\lib"
 set "Path=%JAVA_HOME%\bin;%Path%"
 
 if not exist "%JAVA_HOME%\bin\java.exe" (
-    echo [é”™è¯¯] æ‰¾ä¸åˆ°è‡ªå¸¦çš„ JDKï¼š%JAVA_HOME%
-    echo        è¯·ç¡®è®¤ exam-bundle ç›®å½•å®Œæ•´ï¼Œæ²¡æœ‰è¢«æ€æ¯’è½¯ä»¶åˆ æ‰æ–‡ä»¶ã€‚
+    echo [´íÎó] ÕÒ²»µ½×Ô´øµÄ JDK£º%JAVA_HOME%
+    echo        ÇëÈ·ÈÏ exam-bundle Ä¿Â¼ÍêÕû£¬Ã»ÓĞ±»É±¶¾Èí¼şÉ¾µôÎÄ¼ş¡£
     echo.
     pause
     exit /b 1
 )
 
 if not exist "mysql-5.6.16-win32\data\mysql\user.frm" (
-    echo [æç¤º] MySQL è¿˜æ²¡æœ‰åˆå§‹åŒ–ï¼Œæ— æ³•å¯åŠ¨ã€‚
+    echo [ÌáÊ¾] MySQL »¹Ã»ÓĞ³õÊ¼»¯£¬ÎŞ·¨Æô¶¯¡£
     echo.
-    echo        è¯·æŒ‰é¡ºåºæ‰§è¡Œä¸‹é¢ä¸‰æ­¥ï¼Œç„¶åå†è¿è¡Œæœ¬è„šæœ¬ï¼š
-    echo          1^) mysql-5.6.16-win32\1-åˆå§‹åŒ–.bat
-    echo          2^) mysql-5.6.16-win32\2-å¯åŠ¨.bat
-    echo          3^) mysql-5.6.16-win32\3-å»ºåº“.bat
+    echo        Çë°´Ë³ĞòÖ´ĞĞÏÂÃæÈı²½£¬È»ºóÔÙÔËĞĞ±¾½Å±¾£º
+    echo          1^) mysql-5.6.16-win32\1-³õÊ¼»¯.bat
+    echo          2^) mysql-5.6.16-win32\2-Æô¶¯.bat
+    echo          3^) mysql-5.6.16-win32\3-½¨¿â.bat
     echo.
     pause
     exit /b 1
 )
 
 echo ============================================================
-echo   [1/2] å¯åŠ¨ MySQLï¼ˆ127.0.0.1:3306ï¼‰
+echo   [1/2] Æô¶¯ MySQL£¨127.0.0.1:3306£©
 echo ============================================================
 cd /d "%~dp0mysql-5.6.16-win32"
 cmd /c xq-startup.bat
-timeout /t 4 /nobreak >nul
+ping -n 4 127.0.0.1 >nul
 
 echo.
 echo ============================================================
-echo   [2/2] å¯åŠ¨ Tomcatï¼ˆhttp://localhost:8080/exam/ï¼‰
+echo   [2/2] Æô¶¯ Tomcat£¨http://localhost:8080/exam/£©
 echo ============================================================
 cd /d "%~dp0apache-tomcat-7.0.50\bin"
 cmd /c startup.bat
 
 echo.
 echo ============================================================
-echo   å¯åŠ¨å®Œæˆ
-echo   è®¿é—®åœ°å€ï¼šhttp://localhost:8080/exam/
-echo   ç®¡ç†å‘˜  ï¼šadmin / 123456
-echo   å…³é—­æœåŠ¡ï¼šmysql-5.6.16-win32\xq-shutdown.bat
+echo   Æô¶¯Íê³É
+echo   ·ÃÎÊµØÖ·£ºhttp://localhost:8080/exam/
+echo   ¹ÜÀíÔ±  £ºadmin / 123456
+echo   ¹Ø±Õ·şÎñ£ºmysql-5.6.16-win32\xq-shutdown.bat
 echo             apache-tomcat-7.0.50\bin\shutdown.bat
 echo ============================================================
 echo.
